@@ -5,7 +5,7 @@
 // Directive based on http://stackoverflow.com/a/931695
 angular
   .module("sj.input", [])
-  .directive("sjInput", function($compile) {
+  .directive("sjInput", function($compile, $document) {
     return {
       restrict: 'A',
       require: '?ngModel',
@@ -15,7 +15,7 @@ angular
         var config = {
           maxWidth: 1000,
           minWidth: 0,
-          comfortZone: 25
+          comfortZone: 8
         };
 
         function computed(element) {
@@ -42,6 +42,10 @@ angular
         });
 
         var check = function() {
+
+          if (! angular.isFunction(ngModel.$viewValue.replace)) {
+            return;
+          }
 
           // escape the text to avoid wrong rendering because of wrong
           // browser encoding settings
@@ -76,9 +80,8 @@ angular
 
         element.after(testSubject);
 
-        element.on('keyup keydown blur update', function() {
-          check();
-        });
+        element.on('keyup keydown blur update', check);
+        $document.ready(check);
       }
     };
   });
