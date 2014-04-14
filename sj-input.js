@@ -43,7 +43,8 @@ angular
 
         var check = function() {
 
-          if (! angular.isFunction(ngModel.$viewValue.replace)) {
+          if ( ! angular.isDefined(ngModel.$viewValue) ||
+            ! angular.isFunction(ngModel.$viewValue.replace)) {
             return;
           }
 
